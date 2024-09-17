@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        .entry-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Diákönkormányzat Kezelő Felület</h1>
+
+    <h2>Új fellépő hozzáadása</h2>
+    <form action="/add" method="POST">
+        <label for="name">Adatok: (Pl.: Balogh-Tatai Levente / 001 / 8.b)</label>
+        <input type="text" name="name" id="name" required>
+        
+        <label for="gender">Nem:</label>
+        <select name="gender" id="gender" required>
+            <option value="">-- Válasz nemet --</option>
+            <option value="male">Férfi</option>
+            <option value="female">Nő</option>
+        </select>
+        
+        <button type="submit">Add Entry</button>
+    </form>
+
+    <h2>Fellépők kezelése</h2>
+    <ul>
+        <% entries.forEach(entry => { %>
+            <li>
+                <form action="/edit" method="POST" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= entry.id %>">
+                    <input type="text" name="name" value="<%= entry.name %>" required>
+                    <select name="gender" required>
+                        <option value="male" <%= entry.gender === 'male' ? 'selected' : '' %>>Male</option>
+                        <option value="female" <%= entry.gender === 'female' ? 'selected' : '' %>>Female</option>
+                    </select>
+                    <button type="submit">Update</button>
+                </form>
+                <form action="/delete" method="POST" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= entry.id %>">
+                    <button type="submit" style="background-color: red;">Delete</button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
+    
+    <h2>Szavazatok kezelése</h2>
+    <a href="/admin/results">
+        <button>View Voting Results</button>
+    </a>
+</body>
+</html>

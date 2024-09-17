@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szavazatok</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Szavazatok</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Teljes Név</th>
+                <th>Szavazatok</th>
+                <th>Nem</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% results.forEach(result => { %>
+                <tr>
+                    <td><%= result.entry_name %></td>
+                    <td><%= result.vote_count %></td>
+                    <td><%= result.gender %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    <!--form action="/admin/reset-votes" method="POST">
+        <button disabled type="submit">Szavazatok Törlése</button>
+    </form-->
+    <a href="/admin/export-excel">
+        <button>Exportálás Excel-be</button>
+    </a>
+</body>
+</html>

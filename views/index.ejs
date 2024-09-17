@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szavazz a királyokra!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        select, button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Szavazás</h1>
+    <form action="/vote" method="POST">
+        <label for="male">Bálkirály:</label>
+        <select name="male_id" id="male" required>
+            <option value="">-- Válassz Bálkirályt --</option>
+            <% entries.filter(e => e.gender === 'male').forEach(entry => { %>
+                <option value="<%= entry.id %>"><%= entry.name %></option>
+            <% }) %>
+        </select>
+        
+        <label for="female">Bálkirálynő:</label>
+        <select name="female_id" id="female" required>
+            <option value="">-- Válassz Bálkirálynőt --</option>
+            <% entries.filter(e => e.gender === 'female').forEach(entry => { %>
+                <option value="<%= entry.id %>"><%= entry.name %></option>
+            <% }) %>
+        </select>
+        
+        <button type="submit">Szavazat Leadása</button>
+    </form>
+</body>
+</html>
