@@ -60,10 +60,19 @@
             font-size: 14px;
             color: #777;
         }
+
+        #img-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-    <h1>Szavazás</h1>
+    <div id="img-container">
+        <img style="width: 120px; height: 120px;" src="/data:logo" alt="DÖK Logó">
+    </div>
+        <h1>Szavazás</h1>
     <form action="/vote" method="POST">
         <label for="male">Bálkirály:</label>
         <select name="male_id" id="male" required>
