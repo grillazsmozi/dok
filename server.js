@@ -3,6 +3,7 @@ const sqlite3 = require('sqlite3').verbose();
 const bodyParser = require('body-parser');
 const path = require('path');
 const ExcelJS = require('exceljs');
+let locked = false
 
 const app = express();
 const db = new sqlite3.Database('./competition.db');
@@ -35,10 +36,15 @@ db.serialize(() => {
 
 // Routes
 app.get('/', (req, res) => {
-  db.all('SELECT * FROM entries', (err, entries) => {
-    if (err) throw err;
-    res.render('index', { entries });
-  });
+  if (locked === false) {
+    db.all('SELECT * FROM entries', (err, entries) => {
+      if (err) throw err;
+      res.render('index', { entries });
+    });
+  }else{
+    res.render('locked');
+  }
+  
 });
 
 app.get('/admin', (req, res) => {
@@ -46,6 +52,18 @@ app.get('/admin', (req, res) => {
     if (err) throw err;
     res.render('admin', { entries });
   });
+});
+
+app.get('/status', (req, res) => {
+  res.send(locked)
+});
+
+app.post('/admin/lock', (req, res) => {
+  if (locked === false) {
+    locked = true;
+  }else{
+    locked = false;
+  }
 });
 
 

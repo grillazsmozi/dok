@@ -5,5 +5,15 @@
     "exceljs": "^4.4.0",
     "express": "^4.21.0",
     "sqlite3": "^5.1.7"
-  }
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "name": "dok",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }

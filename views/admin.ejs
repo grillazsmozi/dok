@@ -56,6 +56,7 @@
 </head>
 <body>
     <h1>Diákönkormányzat Kezelő Felület</h1>
+    <button id="lock" onclick="lock()">🔒 SZAVAZÁS LEZÁRÁSA</button>
 
     <h2>Új fellépő hozzáadása</h2>
     <form action="/add" method="POST">
@@ -97,5 +98,35 @@
     <a href="/admin/results">
         <button>View Voting Results</button>
     </a>
+    <script>
+        let locked = false
+        function lock() {
+            if (locked == true) {
+                document.getElementById("lock").innerHTML = "🔒 SZAVAZÁS LEZÁRÁSA";
+                locked = false
+                fetch("/admin/lock", {method: 'POST', body: ""})
+            }else{
+                document.getElementById("lock").innerHTML = "🔓 SZAVAZÁS ENGEDÉLYEZÉSE";
+                locked = true
+                fetch("/admin/lock", {method: 'POST', body: ""})
+            }
+        }
+
+        /*function updateLock() {
+            const status = fetch("/status")
+            if (status === true) {
+                document.getElementById("lock").innerHTML = "🔓 SZAVAZÁS ENGEDÉLYEZÉSE";
+                locked = true
+            }else{
+                document.getElementById("lock").innerHTML = "🔒 SZAVAZÁS LEZÁRÁSA";
+                locked = false
+            }
+            setInterval(() => {
+                updateLock()
+            }, 1000);
+        }
+
+        updateLock()*/
+    </script>
 </body>
 </html>
