@@ -55,7 +55,11 @@ app.get('/admin', (req, res) => {
 });
 
 app.get('/status', (req, res) => {
-  res.send(locked)
+  if (locked) {
+    res.send(true)
+  } else {
+    res.send(false)
+  }
 });
 
 app.post('/admin/lock', (req, res) => {
