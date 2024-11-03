@@ -119,7 +119,7 @@ app.post('/vote', (req, res) => {
   });
 });
 
-app.post('/admin/reset-votes', (req, res) => {
+app.get('/admin/reset-votes', (req, res) => {
   db.run('DELETE FROM votes', (err) => {
     if (err) throw err;
     res.redirect('/admin/results');

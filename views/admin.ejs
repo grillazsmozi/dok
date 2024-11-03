@@ -99,6 +99,8 @@
         <button>View Voting Results</button>
     </a>
     <script>
+        console.log(fetch("/status"))
+
         let locked = false
         function lock() {
             if (locked == true) {
@@ -112,21 +114,18 @@
             }
         }
 
-        /*function updateLock() {
+        function updateLock() {
             const status = fetch("/status")
             if (status === true) {
-                document.getElementById("lock").innerHTML = "🔓 SZAVAZÁS ENGEDÉLYEZÉSE";
-                locked = true
-            }else{
                 document.getElementById("lock").innerHTML = "🔒 SZAVAZÁS LEZÁRÁSA";
-                locked = false
+                console.log("true")
+            }else{
+                document.getElementById("lock").innerHTML = "🔓 SZAVAZÁS ENGEDÉLYEZÉSE";
+                console.log("false or error")
             }
-            setInterval(() => {
-                updateLock()
-            }, 1000);
         }
 
-        updateLock()*/
+        updateLock()
     </script>
 </body>
 </html>

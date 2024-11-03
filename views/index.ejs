@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rákóczi Csorna | DÖK</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -66,6 +67,10 @@
             justify-content: center;
             align-items: center;
         }
+
+        :-webkit-full-screen,:-ms-fullscreen,:fullscreen {
+            background-color: #e3f2fd;
+        }
     </style>
 </head>
 <body>
@@ -93,8 +98,48 @@
         <button type="submit">Szavazat Leadása</button>
     </form>
     <footer>
-        &copy; 2024 Minden jog fenttartva. II. Rákóczi Ferend Római Katolikus Iskola Diákönkormányzata.
+        &copy; 2024 Minden jog fenttartva. II. Rákóczi Ferenc Római Katolikus Iskola Diákönkormányzata.
     </footer>
+    <button onclick="fullscreen()" style="background: none; border: none;"><span class="material-symbols-outlined" id="screen-icon">
+        fullscreen
+        </span></button>
+        <script>
+            /* Get the documentElement (<html>) to display the page in fullscreen */
+            var elem = document.body;
+            let fullscreened = false
+            
+            /* View in fullscreen */
+            function openFullscreen() {
+              if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+              } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+              } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+              }
+            }
+            
+            /* Close fullscreen */
+            function closeFullscreen() {
+              if (document.exitFullscreen) {
+                document.exitFullscreen();
+              } else if (document.webkitExitFullscreen) { /* Safari */
+                document.webkitExitFullscreen();
+              } else if (document.msExitFullscreen) { /* IE11 */
+                document.msExitFullscreen();
+              }
+            }
+
+            function fullscreen() {
+                if (!fullscreened) {
+                    openFullscreen()
+                    fullscreened = true
+                } else {
+                    closeFullscreen()
+                    fullscreened = false
+                }
+            }
+    </script>
     <script>
         async function updateLock() {
             try {
