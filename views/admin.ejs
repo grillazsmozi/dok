@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Rákóczi DÖK | Kezelőfelület</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,11 +55,11 @@
     </style>
 </head>
 <body>
-    <h1>Diákönkormányzat Kezelő Felület</h1>
-    <button id="lock" onclick="lock()">🔒 SZAVAZÁS LEZÁRÁSA</button>
+    <h1>Diákönkormányzat Kezelő Felület</h1> <button onclick="logout()">Kijelentkezés</button>
+    <button id="lock" class="admin" onclick="lock()">🔒 SZAVAZÁS LEZÁRÁSA</button>
 
-    <h2>Új fellépő hozzáadása</h2>
-    <form action="/add" method="POST">
+    <h2 class="staff">Új fellépő hozzáadása</h2>
+    <form action="/add" method="POST" class="staff">
         <label for="name">Adatok: (Pl.: Balogh-Tatai Levente / 001 / 8.b)</label>
         <input type="text" name="name" id="name" required>
         
@@ -70,33 +70,32 @@
             <option value="female">Nő</option>
         </select>
         
-        <button type="submit">Add Entry</button>
+        <button type="submit">Regisztrálás</button>
     </form>
 
-    <h2>Fellépők kezelése</h2>
-    <ul>
+    <h2 class="admin">Fellépők kezelése</h2>
+    <ul class="admin">
         <% entries.forEach(entry => { %>
             <li>
                 <form action="/edit" method="POST" style="display:inline;">
                     <input type="hidden" name="id" value="<%= entry.id %>">
                     <input type="text" name="name" value="<%= entry.name %>" required>
                     <select name="gender" required>
-                        <option value="male" <%= entry.gender === 'male' ? 'selected' : '' %>>Male</option>
-                        <option value="female" <%= entry.gender === 'female' ? 'selected' : '' %>>Female</option>
+                        <option value="male" <%= entry.gender === 'male' ? 'selected' : '' %>>Bálkirály</option>
+                        <option value="female" <%= entry.gender === 'female' ? 'selected' : '' %>>Bálkirálynő</option>
                     </select>
-                    <button type="submit">Update</button>
+                    <button type="submit">Frissítés</button>
                 </form>
                 <form action="/delete" method="POST" style="display:inline;">
                     <input type="hidden" name="id" value="<%= entry.id %>">
-                    <button type="submit" style="background-color: red;">Delete</button>
+                    <button type="submit" style="background-color: red;">Törlés</button>
                 </form>
             </li>
         <% }) %>
     </ul>
-    
-    <h2>Szavazatok kezelése</h2>
-    <a href="/admin/results">
-        <button>View Voting Results</button>
+    <hr class="admin">
+    <a href="/admin/results" class="admin">
+        <button class="admin">Szavazatok megtekintése</button>
     </a>
     <script>
         console.log(fetch("/status"))
@@ -127,5 +126,45 @@
 
         updateLock()
     </script>
+    <script>
+        const admins = ["admin"];
+        const staff = ["staff"];
+        const levels = ["IPKkjs01xo","532GKYWFMZ"];
+        let adminElements = document.getElementsByClassName("admin");
+
+
+    
+        let adminLevel = window.sessionStorage.getItem("adminlevel");
+    
+        if (!adminLevel) {
+            let prompt1 = prompt("Kérjük jelentkezzen be!");
+            if (admins.includes(prompt1)) {
+                console.log("Creating admin key");
+                window.sessionStorage.setItem("adminlevel", "IPKkjs01xo");
+                console.log("Created admin key");
+            } else if (staff.includes(prompt1)) {
+                console.log("Creating staff key");
+                window.sessionStorage.setItem("adminlevel", "532GKYWFMZ");
+                console.log("Created staff key");
+                for (let i = 0; i < adminElements.length; i++) {
+                    adminElements[i].style.display = "none";
+                }
+            } else {
+                console.log("Nem vagy jogosult a belépéshez!");
+                alert("Nem vagy jogosult a belépéshez!");
+                window.location.reload();
+            }
+        } else if (!levels.includes(adminLevel)) {
+            alert("Error: Authentication error! (E405)");
+            window.sessionStorage.removeItem("adminlevel");
+            window.location.reload()
+        }
+
+        function logout() {
+            window.sessionStorage.removeItem("adminlevel");
+            window.location.reload()
+        }
+    </script>
+    
 </body>
 </html>

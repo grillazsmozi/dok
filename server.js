@@ -13,6 +13,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
+const admins = ["admin"];
+const staff = ["staff"];
+
 // Create tables if they don't exist
 db.serialize(() => {
   db.run(`
@@ -46,6 +49,10 @@ app.get('/', (req, res) => {
   }
   
 });
+
+app.get('/api/auths', (req, res) => {
+  res.json({ admins, staff });
+})
 
 app.get('/admin', (req, res) => {
   db.all('SELECT * FROM entries', (err, entries) => {
