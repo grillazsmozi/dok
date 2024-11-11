@@ -60,7 +60,7 @@
 
     <h2 class="staff">Új fellépő hozzáadása</h2>
     <form action="/add" method="POST" class="staff">
-        <label for="name">Adatok: (Pl.: Balogh-Tatai Levente / 001 / 8.b)</label>
+        <label for="name">Adatok: (Pl.: 001)</label>
         <input type="text" name="name" id="name" required>
         
         <label for="gender">Nem:</label>
@@ -127,44 +127,63 @@
         updateLock()
     </script>
     <script>
-        const admins = ["admin"];
-        const staff = ["staff"];
-        const levels = ["IPKkjs01xo","532GKYWFMZ"];
-        let adminElements = document.getElementsByClassName("admin");
-
-
+        let admins;
+        let staff;
     
-        let adminLevel = window.sessionStorage.getItem("adminlevel");
+        async function getAuths() {
+            const response = await fetch("/api/auths");
+            const auths = await response.json();
+            console.log(auths);
     
-        if (!adminLevel) {
-            let prompt1 = prompt("Kérjük jelentkezzen be!");
-            if (admins.includes(prompt1)) {
-                console.log("Creating admin key");
-                window.sessionStorage.setItem("adminlevel", "IPKkjs01xo");
-                console.log("Created admin key");
-            } else if (staff.includes(prompt1)) {
-                console.log("Creating staff key");
-                window.sessionStorage.setItem("adminlevel", "532GKYWFMZ");
-                console.log("Created staff key");
-                for (let i = 0; i < adminElements.length; i++) {
-                    adminElements[i].style.display = "none";
+            admins = auths.admins;
+            staff = auths.staff;
+    
+            initAuth(); // Initialize the authentication check only after auths are loaded
+        }
+    
+        function initAuth() {
+            console.log(`Admins: ${admins}`);
+            console.log(`Staff: ${staff}`);
+    
+            const levels = ["IPKkjs01xo", "532GKYWFMZ"];
+            let adminElements = document.getElementsByClassName("admin");
+    
+            let adminLevel = window.sessionStorage.getItem("adminlevel");
+    
+            if (!adminLevel) {
+                let prompt1 = prompt("Kérjük jelentkezzen be!");
+                if (admins.includes(prompt1)) {
+                    console.log("Creating admin key");
+                    window.sessionStorage.setItem("adminlevel", "IPKkjs01xo");
+                    console.log("Created admin key");
+                } else if (staff.includes(prompt1)) {
+                    console.log("Creating staff key");
+                    window.sessionStorage.setItem("adminlevel", "532GKYWFMZ");
+                    console.log("Created staff key");
+                    for (let i = 0; i < adminElements.length; i++) {
+                        adminElements[i].style.display = "none";
+                    }
+                } else {
+                    console.log("Nem vagy jogosult a belépéshez!");
+                    alert("Nem vagy jogosult a belépéshez!");
+                    window.location.reload();
                 }
-            } else {
-                console.log("Nem vagy jogosult a belépéshez!");
-                alert("Nem vagy jogosult a belépéshez!");
+            } else if (!levels.includes(adminLevel)) {
+                alert("Error: Authentication error! (E405)");
+                window.sessionStorage.removeItem("adminlevel");
                 window.location.reload();
             }
-        } else if (!levels.includes(adminLevel)) {
-            alert("Error: Authentication error! (E405)");
-            window.sessionStorage.removeItem("adminlevel");
-            window.location.reload()
         }
-
+    
         function logout() {
             window.sessionStorage.removeItem("adminlevel");
-            window.location.reload()
+            window.location.reload();
         }
+    
+        // Call getAuths to start the fetch and initialization
+        getAuths();
     </script>
+    
     
 </body>
 </html>

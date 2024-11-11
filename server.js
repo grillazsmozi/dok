@@ -13,8 +13,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
-const admins = ["admin"];
-const staff = ["staff"];
+const admins = ["kamcsika23","baloghtlevente20110127#"];
+const staff = ["bognarlucaanna","vendeg"];
 
 // Create tables if they don't exist
 db.serialize(() => {
