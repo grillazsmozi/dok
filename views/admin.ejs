@@ -117,10 +117,10 @@
             const status = fetch("/status")
             if (status === true) {
                 document.getElementById("lock").innerHTML = "🔒 SZAVAZÁS LEZÁRÁSA";
-                console.log("true")
+                
             }else{
                 document.getElementById("lock").innerHTML = "🔓 SZAVAZÁS ENGEDÉLYEZÉSE";
-                console.log("false or error")
+                
             }
         }
 
@@ -133,7 +133,6 @@
         async function getAuths() {
             const response = await fetch("/api/auths");
             const auths = await response.json();
-            console.log(auths);
     
             admins = auths.admins;
             staff = auths.staff;
@@ -142,9 +141,6 @@
         }
     
         function initAuth() {
-            console.log(`Admins: ${admins}`);
-            console.log(`Staff: ${staff}`);
-    
             const levels = ["IPKkjs01xo", "532GKYWFMZ"];
             let adminElements = document.getElementsByClassName("admin");
     
