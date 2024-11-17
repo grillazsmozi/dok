@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 
 const admins = ["kamcsika23","baloghtlevente20110127#"];
-const staff = ["bognarlucaanna","vendeg"];
+const staff = ["vendeg"];
 
 // Create tables if they don't exist
 db.serialize(() => {
@@ -59,6 +59,10 @@ app.get('/admin', (req, res) => {
     if (err) throw err;
     res.render('admin', { entries });
   });
+});
+
+app.get('/admin/scripts', (req, res) => {
+  res.render('scripts');
 });
 
 app.get('/status', (req, res) => {
