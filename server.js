@@ -86,6 +86,10 @@ app.get('/data:logo', (req, res) => {
   res.sendFile(__dirname + "/data/rakoczidok_logo.png")
 });
 
+app.get('/script:auth-script', (req, res) => {
+  res.sendFile(__dirname + "/data/auth.js")
+});
+
 app.get('/admin/results', (req, res) => {
   db.all(`
     SELECT e.name AS entry_name, COUNT(v.id) AS vote_count, e.gender
