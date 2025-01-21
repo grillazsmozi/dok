@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const ExcelJS = require('exceljs');
 let locked = false
+const katalin = false
 
 const app = express();
 const db = new sqlite3.Database('./competition.db');
@@ -42,7 +43,11 @@ app.get('/', (req, res) => {
   if (locked === false) {
     db.all('SELECT * FROM entries', (err, entries) => {
       if (err) throw err;
-      res.render('index', { entries });
+      if (katalin == true) {
+        res.render('index', { entries });
+      }else{
+        res.render('index-farsang', { entries });
+      }
     });
   }else{
     res.render('locked');
@@ -57,7 +62,11 @@ app.get('/api/auths', (req, res) => {
 app.get('/admin', (req, res) => {
   db.all('SELECT * FROM entries', (err, entries) => {
     if (err) throw err;
-    res.render('admin', { entries });
+    if (katalin == true) {
+      res.render('admin', { entries });
+    }else{
+      res.render('admin-farsang', { entries });
+    }
   });
 });
 
@@ -98,7 +107,11 @@ app.get('/admin/results', (req, res) => {
     GROUP BY e.id
   `, (err, results) => {
     if (err) throw err;
-    res.render('results', { results });
+    if (katalin == true) {
+      res.render('results', { results });
+    }else{
+      res.render('results-farsang', { results });
+    }
   });
 });
 

@@ -79,18 +79,10 @@
     </div>
         <h1>Szavazás</h1>
     <form action="/vote" method="POST">
-        <label for="male">Bálkirály:</label>
+        <label for="male">Voks:</label>
         <select name="male_id" id="male" required>
-            <option value="">-- Válassz Bálkirályt --</option>
+            <option value="">-- Válassz Személyt --</option>
             <% entries.filter(e => e.gender === 'male').forEach(entry => { %>
-                <option value="<%= entry.id %>"><%= entry.name %></option>
-            <% }) %>
-        </select>
-        
-        <label for="female">Bálkirálynő:</label>
-        <select name="female_id" id="female" required>
-            <option value="">-- Válassz Bálkirálynőt --</option>
-            <% entries.filter(e => e.gender === 'female').forEach(entry => { %>
                 <option value="<%= entry.id %>"><%= entry.name %></option>
             <% }) %>
         </select>

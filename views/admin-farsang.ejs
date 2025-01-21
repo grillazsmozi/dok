@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rákóczi DÖK | Kezelőfelület</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+        }
+        input, select, button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        .entry-form {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Diákönkormányzat Kezelő Felület</h1> <button onclick="logout()">Kijelentkezés</button>
+    <button id="lock" class="admin" onclick="lock()">🔒 SZAVAZÁS LEZÁRÁSA</button>
+
+    <h2 class="staff">Új fellépő hozzáadása</h2>
+    <form action="/add" method="POST" class="staff">
+        <label for="name">Név: (Pl.: 001)</label>
+        <input type="text" name="name" id="name" required>
+    
+        <select name="gender" id="gender" style="display: none;" required>
+            <option value="male">Jelmezbál</option>
+        </select>
+        
+        <button type="submit">Regisztrálás</button>
+    </form>
+
+    <h2 class="admin">Fellépők kezelése</h2>
+    <ul class="admin">
+        <% entries.forEach(entry => { %>
+            <li style="border: #7c7c7c 2px solid;">
+                <form action="/edit" method="POST" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= entry.id %>">
+                    <input type="text" name="name" value="<%= entry.name %>" required>
+                    <select name="gender" style="display: none;" required>
+                        <option value="male" <%= entry.gender === 'male' ? 'selected' : '' %>>Bálkirály</option>
+                        <option value="female" <%= entry.gender === 'female' ? 'selected' : '' %>>Bálkirálynő</option>
+                    </select>
+                    <button type="submit">Frissítés</button>
+                </form>
+                <form action="/delete" method="POST" style="display:inline;">
+                    <input type="hidden" name="id" value="<%= entry.id %>">
+                    <button type="submit" style="background-color: red;">Törlés</button>
+                </form>
+            </li>
+        <% }) %>
+    </ul>
+    <hr class="admin">
+    <a href="/admin/results" class="admin">
+        <button class="admin">Szavazatok megtekintése</button>
+    </a>
+    <hr>
+    <a href="/admin/scripts">
+        <button>Szövegek megtekintése</button>
+    </a>
+    <script>
+        console.log(fetch("/status"))
+
+        let locked = false
+        function lock() {
+            if (locked == true) {
+                document.getElementById("lock").innerHTML = "🔒 SZAVAZÁS LEZÁRÁSA";
+                locked = false
+                fetch("/admin/lock", {method: 'POST', body: ""})
+            }else{
+                document.getElementById("lock").innerHTML = "🔓 SZAVAZÁS ENGEDÉLYEZÉSE";
+                locked = true
+                fetch("/admin/lock", {method: 'POST', body: ""})
+            }
+        }
+
+        function updateLock() {
+            const status = fetch("/status")
+            if (status === true) {
+                document.getElementById("lock").innerHTML = "🔒 SZAVAZÁS LEZÁRÁSA";
+                
+            }else{
+                document.getElementById("lock").innerHTML = "🔓 SZAVAZÁS ENGEDÉLYEZÉSE";
+                
+            }
+        }
+
+        updateLock()
+    </script>
+    <!--script>
+        let admins;
+        let staff;
+    
+        async function getAuths() {
+            const response = await fetch("/api/auths");
+            const auths = await response.json();
+    
+            admins = auths.admins;
+            staff = auths.staff;
+    
+            initAuth(); // Initialize the authentication check only after auths are loaded
+        }
+    
+        function initAuth() {
+            const levels = ["IPKkjs01xo", "532GKYWFMZ"];
+            let adminElements = document.getElementsByClassName("admin");
+    
+            let adminLevel = window.sessionStorage.getItem("adminlevel");
+    
+            if (!adminLevel) {
+                let prompt1 = prompt("Kérjük jelentkezzen be!");
+                if (admins.includes(prompt1)) {
+                    console.log("Creating admin key");
+                    window.sessionStorage.setItem("adminlevel", "IPKkjs01xo");
+                    console.log("Created admin key");
+                } else if (staff.includes(prompt1)) {
+                    console.log("Creating staff key");
+                    window.sessionStorage.setItem("adminlevel", "532GKYWFMZ");
+                    console.log("Created staff key");
+                    for (let i = 0; i < adminElements.length; i++) {
+                        adminElements[i].style.display = "none";
+                    }
+                } else {
+                    console.log("Nem vagy jogosult a belépéshez!");
+                    alert("Nem vagy jogosult a belépéshez!");
+                    window.location.reload();
+                }
+            } else if (!levels.includes(adminLevel)) {
+                alert("Error: Authentication error! (E405)");
+                window.sessionStorage.removeItem("adminlevel");
+                window.location.reload();
+            }
+        }
+    
+        function logout() {
+            window.sessionStorage.removeItem("adminlevel");
+            window.location.reload();
+        }
+    
+        // Call getAuths to start the fetch and initialization
+        getAuths();
+    </script-->
+    <script src="/script:auth-script"></script>
+    
+    
+</body>
+</html>
